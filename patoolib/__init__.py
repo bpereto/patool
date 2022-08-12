@@ -18,7 +18,7 @@ from __future__ import print_function
 import inspect
 import sys
 
-import exceptions
+from . import exceptions
 
 if not hasattr(sys, "version_info") or sys.version_info < (2, 7, 0, "final", 0):
     raise SystemExit("This program requires Python 2.7 or later.")
