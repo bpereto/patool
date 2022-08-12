@@ -24,6 +24,8 @@ import tempfile
 import time
 import traceback
 import locale
+
+from exceptions import PatoolError
 from . import configuration, ArchiveMimetypes, ArchiveCompressions, program_supports_compression
 try:
     from shutil import which
@@ -154,11 +156,6 @@ def add_mimetype(mimedb, mimetype, extension):
     # If extension is already a common type, strict=True must be used.
     strict = extension in mimedb.types_map[True]
     mimedb.add_type(mimetype, extension, strict=strict)
-
-
-class PatoolError (Exception):
-    """Raised when errors occur."""
-    pass
 
 
 class memoized (object):

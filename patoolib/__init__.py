@@ -17,6 +17,9 @@ from __future__ import print_function
 
 import inspect
 import sys
+
+import exceptions
+
 if not hasattr(sys, "version_info") or sys.version_info < (2, 7, 0, "final", 0):
     raise SystemExit("This program requires Python 2.7 or later.")
 import os
@@ -354,11 +357,11 @@ def get_archive_format (filename):
     """Detect filename archive format and optional compression."""
     mime, compression = util.guess_mime(filename)
     if not (mime or compression):
-        raise util.PatoolError("unknown archive format for file `%s'" % filename)
+        raise exceptions.PatoolUnknownArchiveError("unknown archive format for file `%s'" % filename)
     if mime in ArchiveMimetypes:
         format = ArchiveMimetypes[mime]
     else:
-        raise util.PatoolError("unknown archive format for file `%s' (mime-type is `%s')" % (filename, mime))
+        raise exceptions.PatoolUnknownArchiveError("unknown archive format for file `%s' (mime-type is `%s')" % (filename, mime))
     if format == compression:
         # file cannot be in same format compressed
         compression = None
@@ -368,9 +371,9 @@ def get_archive_format (filename):
 def check_archive_format (format, compression):
     """Make sure format and compression is known."""
     if format not in ArchiveFormats:
-        raise util.PatoolError("unknown archive format `%s'" % format)
+        raise exceptions.PatoolUnknownArchiveError("unknown archive format `%s'" % format)
     if compression is not None and compression not in ArchiveCompressions:
-        raise util.PatoolError("unknown archive compression `%s'" % compression)
+        raise exceptions.PatoolUnknownArchiveError("unknown archive compression `%s'" % compression)
 
 
 def find_archive_program (format, command, program=None, password=None):
@@ -387,7 +390,7 @@ def find_archive_program (format, command, program=None, password=None):
     if password is not None:
         programs = _remove_command_without_password_support(programs, format, command)
     if not programs:
-        raise util.PatoolError("%s archive format `%s' is not supported" % (command, format))
+        raise exceptions.PatoolUnsupported("%s archive format `%s' is not supported" % (command, format))
     # return the first existing program
     for program in programs:
         if program.startswith('py_'):
@@ -399,7 +402,7 @@ def find_archive_program (format, command, program=None, password=None):
                 continue
             return exe
     # no programs found
-    raise util.PatoolError("could not find an executable program to %s format %s; candidates are (%s)," % (command, format, ",".join(programs)))
+    raise exceptions.PatoolExeNotFound("could not find an executable program to %s format %s; candidates are (%s)," % (command, format, ",".join(programs)))
 
 
 def _remove_command_without_password_support(programs, format, command):
@@ -418,7 +421,7 @@ def _remove_command_without_password_support(programs, format, command):
         if program not in no_password_support_programs:
             programs_with_support.append(program)
     if not programs_with_support and programs:
-        raise util.PatoolError("%s archive format `%s' with password is not supported" % (command, format))
+        raise exceptions.PatoolUnsupported("%s archive format `%s' with password is not supported" % (command, format))
     return programs_with_support
 
 
@@ -606,7 +609,7 @@ def _handle_archive(archive, command, verbosity=0, interactive=True,
         format, compression = get_archive_format(archive)
     check_archive_format(format, compression)
     if command not in ('list', 'test'):
-        raise util.PatoolError("invalid archive command `%s'" % command)
+        raise exceptions.PatoolUnsupported("invalid archive command `%s'" % command)
     program = find_archive_program(format, command, program=program, password=password)
     check_program_compression(archive, command, program, compression)
     get_archive_cmdlist = get_archive_cmdlist_func(program, command, format)
@@ -646,7 +649,7 @@ def get_archive_cmdlist_func (program, command, format):
             else:
                 if 'password' in inspect.signature(archive_cmdlist_func).parameters:
                     return archive_cmdlist_func(*args, **kwargs)
-                raise util.PatoolError('There is no support for password in %s' % program)
+                raise exceptions.PatoolUnsupported('There is no support for password in %s' % program)
         return check_for_password_before_cmdlist_func_call
     except AttributeError as msg:
         raise util.PatoolError(msg)
