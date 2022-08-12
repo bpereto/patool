@@ -25,8 +25,7 @@ import time
 import traceback
 import locale
 
-import exceptions
-from . import configuration, ArchiveMimetypes, ArchiveCompressions, program_supports_compression
+from . import configuration, ArchiveMimetypes, ArchiveCompressions, program_supports_compression, exceptions
 try:
     from shutil import which
 except ImportError:
