@@ -451,7 +451,7 @@ def list_formats ():
                     else:
                         print("(rar archives not supported)", end=' ')
                 print()
-            except util.PatoolError:
+            except exceptions.PatoolError:
                 # display information what programs can handle this archive format
                 handlers = programs.get(None, programs.get(command))
                 print("   %8s: - (no program found; install %s)" %
@@ -471,7 +471,7 @@ def check_program_compression(archive, command, program, compression):
             comp_prog = find_archive_program(compression, comp_command)
             if not comp_prog:
                 msg = "cannot %s archive `%s': compression `%s' not supported"
-                raise util.PatoolError(msg % (command, archive, compression))
+                raise exceptions.PatoolError(msg % (command, archive, compression))
 
 
 def move_outdir_orphan (outdir):

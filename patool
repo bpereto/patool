@@ -22,7 +22,8 @@ import sys
 import argparse
 import pydoc
 import patoolib
-from patoolib.util import log_error, log_internal_error, PatoolError
+from patoolib.util import log_error, log_internal_error
+from patoolib.exceptions import PatoolError
 from patoolib.configuration import App
 
 def run_extract(args):
