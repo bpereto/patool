@@ -25,7 +25,7 @@ import time
 import traceback
 import locale
 
-from exceptions import PatoolError
+import exceptions
 from . import configuration, ArchiveMimetypes, ArchiveCompressions, program_supports_compression
 try:
     from shutil import which
@@ -217,11 +217,11 @@ def run (cmd, verbosity=0, **kwargs):
 
 
 def run_checked (cmd, ret_ok=(0,), **kwargs):
-    """Run command and raise PatoolError on error."""
+    """Run command and raise PatoolCmdError on error."""
     retcode = run(cmd, **kwargs)
     if retcode not in ret_ok:
         msg = "Command `%s' returned non-zero exit status %d" % (cmd, retcode)
-        raise PatoolError(msg)
+        raise exceptions.PatoolCmdError(msg)
     return retcode
 
 
@@ -396,29 +396,29 @@ def guess_mime_file_text (file_prog, filename):
 def check_existing_filename (filename, onlyfiles=True):
     """Ensure that given filename is a valid, existing file."""
     if not os.path.exists(filename):
-        raise PatoolError("file `%s' was not found" % filename)
+        raise exceptions.PatoolOperationError("file `%s' was not found" % filename)
     if not os.access(filename, os.R_OK):
-        raise PatoolError("file `%s' is not readable" % filename)
+        raise exceptions.PatoolOperationError("file `%s' is not readable" % filename)
     if onlyfiles and not os.path.isfile(filename):
-        raise PatoolError("`%s' is not a file" % filename)
+        raise exceptions.PatoolOperationError("`%s' is not a file" % filename)
 
 
 def check_writable_filename(filename):
     """Ensure that the given filename is writable."""
     if not os.access(filename, os.W_OK):
-        raise PatoolError("file `%s' is not writable" % filename)
+        raise exceptions.PatoolOperationError("file `%s' is not writable" % filename)
 
 
 def check_new_filename (filename):
     """Check that filename does not already exist."""
     if os.path.exists(filename):
-        raise PatoolError("cannot overwrite existing file `%s'" % filename)
+        raise exceptions.PatoolOperationError("cannot overwrite existing file `%s'" % filename)
 
 
 def check_archive_filelist (filenames):
     """Check that file list is not empty and contains only existing files."""
     if not filenames:
-        raise PatoolError("cannot create archive with empty filelist")
+        raise exceptions.PatoolOperationError("cannot create archive with empty filelist")
     for filename in filenames:
         check_existing_filename(filename, onlyfiles=False)
 
@@ -696,7 +696,7 @@ def link_or_copy(src, dst, verbosity=0):
         try:
             shutil.copy(src, dst)
         except OSError as msg:
-            raise PatoolError(msg)
+            raise exceptions.PatoolOperationError(msg)
 
 
 def chdir(directory):
