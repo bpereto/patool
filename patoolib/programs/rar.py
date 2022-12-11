@@ -16,11 +16,13 @@
 """Archive commands for the rar program."""
 import os
 
-def extract_rar (archive, compression, cmd, verbosity, interactive, outdir, password=None):
+def extract_rar(archive, compression, cmd, verbosity, interactive, outdir, keep_broken=True, password=None):
     """Extract a RAR archive."""
     cmdlist = [cmd, 'x']
     if not interactive:
         cmdlist.extend(['-p-', '-y'])
+    if keep_broken:
+        cmdlist.append(['-kb'])
     if password:
         cmdlist.append('-p%s' % password)
     cmdlist.extend(['--', os.path.abspath(archive)])

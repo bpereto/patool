@@ -631,7 +631,7 @@ def get_archive_cmdlist_func (program, command, format):
     try:
         module = importlib.import_module(modulename, __name__)
     except ImportError as msg:
-        raise util.PatoolError(msg)
+        raise exceptions.PatoolError(msg)
     # get archive handler function (e.g. patoolib.programs.star.extract_tar)
     try:
         archive_cmdlist_func = getattr(module, '%s_%s' % (command, format))
@@ -652,7 +652,7 @@ def get_archive_cmdlist_func (program, command, format):
                 raise exceptions.PatoolUnsupported('There is no support for password in %s' % program)
         return check_for_password_before_cmdlist_func_call
     except AttributeError as msg:
-        raise util.PatoolError(msg)
+        raise exceptions.PatoolError(msg)
 
 
 def rmtree_log_error (func, path, exc):
@@ -671,7 +671,7 @@ def _diff_archives (archive1, archive2, verbosity=0, interactive=True):
     diff = util.find_program("diff")
     if not diff:
         msg = "The diff(1) program is required for showing archive differences, please install it."
-        raise util.PatoolError(msg)
+        raise exceptions.PatoolError(msg)
     tmpdir1 = util.tmpdir()
     try:
         path1 = _extract_archive(archive1, outdir=tmpdir1, verbosity=-1)
@@ -690,7 +690,7 @@ def _search_archive(pattern, archive, verbosity=0, interactive=True, password=No
     grep = util.find_program("grep")
     if not grep:
         msg = "The grep(1) program is required for searching archive contents, please install it."
-        raise util.PatoolError(msg)
+        raise exceptions.PatoolError(msg)
     tmpdir = util.tmpdir()
     try:
         path = _extract_archive(archive, outdir=tmpdir, verbosity=-1, password=password)
@@ -827,7 +827,7 @@ def diff_archives(archive1, archive2, verbosity=0, interactive=True):
 def search_archive(pattern, archive, verbosity=0, interactive=True, password=None):
     """Search pattern in archive members."""
     if not pattern:
-        raise util.PatoolError("empty search pattern")
+        raise exceptions.PatoolError("empty search pattern")
     util.check_existing_filename(archive)
     if verbosity >= 0:
         util.log_info("Searching %r in %s ..." % (pattern, archive))
