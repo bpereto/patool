@@ -11,7 +11,7 @@ class PatoolUnsupported(PatoolError):
 
 
 class PatoolExeNotFound(PatoolError):
-    """Raised when the executable for exratctions is missing."""
+    """Raised when the executable for extractions is missing."""
 
 
 class PatoolCmdError(PatoolError):
@@ -20,3 +20,7 @@ class PatoolCmdError(PatoolError):
 
 class PatoolOperationError(PatoolError):
     """Raised when running an operation return errors."""
+
+
+class PatoolPasswordError(PatoolError):
+    """Raised when there is an error regarding passwords."""
