@@ -22,7 +22,7 @@ def extract_rar(archive, compression, cmd, verbosity, interactive, outdir, keep_
     if not interactive:
         cmdlist.extend(['-p-', '-y'])
     if keep_broken:
-        cmdlist.append(['-kb'])
+        cmdlist.append('-kb')
     if password:
         cmdlist.append('-p%s' % password)
     cmdlist.extend(['--', os.path.abspath(archive)])
