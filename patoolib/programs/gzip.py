@@ -25,17 +25,17 @@ def create_gzip(archive, compression, cmd, verbosity, interactive, filenames):
     """Create a GZIP archive."""
     cmdlist = [util.shell_quote(cmd)]
     if verbosity > 1:
-        cmdlist.append('-v')
-    cmdlist.extend(['-c', '-9', '--'])
+        cmdlist.append("-v")
+    cmdlist.extend(["-c", "-9", "--"])
     cmdlist.extend([util.shell_quote(x) for x in filenames])
-    cmdlist.extend(['>', util.shell_quote(archive)])
-    return (cmdlist, {'shell': True})
+    cmdlist.extend([">", util.shell_quote(archive)])
+    return (cmdlist, {"shell": True})
 
 
-def list_gzip (archive, compression, cmd, verbosity, interactive):
+def list_gzip(archive, compression, cmd, verbosity, interactive):
     """List a GZIP archive."""
     cmdlist = [cmd]
     if verbosity > 0:
-        cmdlist.append('-v')
-    cmdlist.extend(['-l', '--', archive])
+        cmdlist.append("-v")
+    cmdlist.extend(["-l", "--", archive])
     return cmdlist

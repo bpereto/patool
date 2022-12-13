@@ -19,28 +19,24 @@ from __future__ import print_function
 from .. import util
 
 
-def list_bzip2 (archive, compression, cmd, verbosity, interactive):
+def list_bzip2(archive, compression, cmd, verbosity, interactive):
     """List a BZIP2 archive."""
     return stripext(cmd, archive, verbosity)
 
-list_compress = \
-  list_lzma = \
-  list_xz = \
-  list_lzip = \
-  list_lrzip = \
-  list_rzip = \
-  list_bzip2
 
-def list_ape (archive, compression, cmd, verbosity, interactive):
+list_compress = list_lzma = list_xz = list_lzip = list_lrzip = list_rzip = list_bzip2
+
+
+def list_ape(archive, compression, cmd, verbosity, interactive):
     """List an APE archive."""
     return stripext(cmd, archive, verbosity, extension=".wav")
 
-list_shn = \
-  list_flac = \
-  list_ape
 
-def stripext (cmd, archive, verbosity, extension=""):
+list_shn = list_flac = list_ape
+
+
+def stripext(cmd, archive, verbosity, extension=""):
     """Print the name without suffix."""
     if verbosity >= 0:
-        print(util.stripext(archive)+extension)
+        print(util.stripext(archive) + extension)
     return None

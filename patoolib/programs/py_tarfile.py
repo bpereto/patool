@@ -17,22 +17,24 @@
 from .. import util, py_lzma
 import tarfile
 
-READ_SIZE_BYTES = 1024*1024
+READ_SIZE_BYTES = 1024 * 1024
 
 
-def list_tar (archive, compression, cmd, verbosity, interactive):
+def list_tar(archive, compression, cmd, verbosity, interactive):
     """List a TAR archive with the tarfile Python module."""
     try:
         with tarfile.open(archive) as tfile:
-            tfile.list(verbose=verbosity>1)
+            tfile.list(verbose=verbosity > 1)
     except Exception as err:
         msg = "error listing %s: %s" % (archive, err)
         raise util.PatoolError(msg)
     return None
 
+
 test_tar = list_tar
 
-def extract_tar (archive, compression, cmd, verbosity, interactive, outdir):
+
+def extract_tar(archive, compression, cmd, verbosity, interactive, outdir):
     """Extract a TAR archive with the tarfile Python module."""
     try:
         with tarfile.open(archive) as tfile:
@@ -43,7 +45,7 @@ def extract_tar (archive, compression, cmd, verbosity, interactive, outdir):
     return None
 
 
-def create_tar (archive, compression, cmd, verbosity, interactive, filenames):
+def create_tar(archive, compression, cmd, verbosity, interactive, filenames):
     """Create a TAR archive with the tarfile Python module."""
     mode = get_tar_mode(compression)
     try:
@@ -56,16 +58,16 @@ def create_tar (archive, compression, cmd, verbosity, interactive, filenames):
     return None
 
 
-def get_tar_mode (compression):
+def get_tar_mode(compression):
     """Determine tarfile open mode according to the given compression."""
-    if compression == 'gzip':
-        return 'w:gz'
-    if compression == 'bzip2':
-        return 'w:bz2'
-    if compression == 'lzma' and py_lzma:
-        return 'w:xz'
+    if compression == "gzip":
+        return "w:gz"
+    if compression == "bzip2":
+        return "w:bz2"
+    if compression == "lzma" and py_lzma:
+        return "w:xz"
     if compression:
-        msg = 'pytarfile does not support %s for tar compression'
+        msg = "pytarfile does not support %s for tar compression"
         raise util.PatoolError(msg % compression)
     # no compression
-    return 'w'
+    return "w"

@@ -17,48 +17,52 @@
 import os
 
 
-def extract_tar (archive, compression, cmd, verbosity, interactive, outdir):
+def extract_tar(archive, compression, cmd, verbosity, interactive, outdir):
     """Extract a TAR archive."""
-    cmdlist = [cmd, '--extract']
+    cmdlist = [cmd, "--extract"]
     add_tar_opts(cmdlist, compression, verbosity)
-    cmdlist.extend(["--file", archive, '--directory', outdir])
+    cmdlist.extend(["--file", archive, "--directory", outdir])
     return cmdlist
 
-def list_tar (archive, compression, cmd, verbosity, interactive):
+
+def list_tar(archive, compression, cmd, verbosity, interactive):
     """List a TAR archive."""
-    cmdlist = [cmd, '--list']
+    cmdlist = [cmd, "--list"]
     add_tar_opts(cmdlist, compression, verbosity)
     cmdlist.extend(["--file", archive])
     return cmdlist
 
+
 test_tar = list_tar
 
-def create_tar (archive, compression, cmd, verbosity, interactive, filenames):
+
+def create_tar(archive, compression, cmd, verbosity, interactive, filenames):
     """Create a TAR archive."""
-    cmdlist = [cmd, '--create']
+    cmdlist = [cmd, "--create"]
     add_tar_opts(cmdlist, compression, verbosity)
-    cmdlist.extend(["--file", archive, '--'])
+    cmdlist.extend(["--file", archive, "--"])
     cmdlist.extend(filenames)
     return cmdlist
 
-def add_tar_opts (cmdlist, compression, verbosity):
+
+def add_tar_opts(cmdlist, compression, verbosity):
     """Add tar options to cmdlist."""
     progname = os.path.basename(cmdlist[0])
-    if compression == 'gzip':
-        cmdlist.append('-z')
-    elif compression == 'compress':
-        cmdlist.append('-Z')
-    elif compression == 'bzip2':
-        cmdlist.append('-j')
-    elif compression in ('lzma', 'xz') and progname == 'bsdtar':
-        cmdlist.append('--%s' % compression)
-    elif compression in ('lzma', 'xz', 'lzip'):
+    if compression == "gzip":
+        cmdlist.append("-z")
+    elif compression == "compress":
+        cmdlist.append("-Z")
+    elif compression == "bzip2":
+        cmdlist.append("-j")
+    elif compression in ("lzma", "xz") and progname == "bsdtar":
+        cmdlist.append("--%s" % compression)
+    elif compression in ("lzma", "xz", "lzip"):
         # use the compression name as program name since
         # tar is picky which programs it can use
         program = compression
         # set compression program
-        cmdlist.extend(['--use-compress-program', program])
+        cmdlist.extend(["--use-compress-program", program])
     if verbosity > 1:
-        cmdlist.append('--verbose')
-    if progname == 'tar':
-        cmdlist.append('--force-local')
+        cmdlist.append("--verbose")
+    if progname == "tar":
+        cmdlist.append("--force-local")

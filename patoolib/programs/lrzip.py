@@ -17,27 +17,30 @@
 import os
 from .. import util
 
-def extract_lrzip (archive, compression, cmd, verbosity, interactive, outdir):
+
+def extract_lrzip(archive, compression, cmd, verbosity, interactive, outdir):
     """Extract a LRZIP archive."""
-    cmdlist = [cmd, '-d']
+    cmdlist = [cmd, "-d"]
     if verbosity > 1:
-        cmdlist.append('-v')
+        cmdlist.append("-v")
     outfile = util.get_single_outfile(outdir, archive)
     cmdlist.extend(["-o", outfile, os.path.abspath(archive)])
     return cmdlist
 
-def test_lrzip (archive, compression, cmd, verbosity, interactive):
+
+def test_lrzip(archive, compression, cmd, verbosity, interactive):
     """Test a LRZIP archive."""
-    cmdlist = [cmd, '-t']
+    cmdlist = [cmd, "-t"]
     if verbosity > 1:
-        cmdlist.append('-v')
+        cmdlist.append("-v")
     cmdlist.append(archive)
     return cmdlist
 
-def create_lrzip (archive, compression, cmd, verbosity, interactive, filenames):
+
+def create_lrzip(archive, compression, cmd, verbosity, interactive, filenames):
     """Create a LRZIP archive."""
-    cmdlist = [cmd, '-o', archive]
+    cmdlist = [cmd, "-o", archive]
     if verbosity > 1:
-        cmdlist.append('-v')
+        cmdlist.append("-v")
     cmdlist.extend(filenames)
     return cmdlist

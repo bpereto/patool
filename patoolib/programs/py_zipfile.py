@@ -19,7 +19,7 @@ from .. import util
 import zipfile
 import os
 
-READ_SIZE_BYTES = 1024*1024
+READ_SIZE_BYTES = 1024 * 1024
 
 
 def list_zip(archive, compression, cmd, verbosity, interactive, password=None):
@@ -36,9 +36,13 @@ def list_zip(archive, compression, cmd, verbosity, interactive, password=None):
         raise util.PatoolError(msg)
     return None
 
+
 test_zip = list_zip
 
-def extract_zip(archive, compression, cmd, verbosity, interactive, outdir, password=None):
+
+def extract_zip(
+    archive, compression, cmd, verbosity, interactive, outdir, password=None
+):
     """Extract a ZIP archive with the zipfile Python module."""
     try:
         if password:
@@ -54,7 +58,7 @@ def extract_zip(archive, compression, cmd, verbosity, interactive, outdir, passw
 def create_zip(archive, compression, cmd, verbosity, interactive, filenames):
     """Create a ZIP archive with the zipfile Python module."""
     try:
-        with zipfile.ZipFile(archive, 'w') as zfile:
+        with zipfile.ZipFile(archive, "w") as zfile:
             for filename in filenames:
                 if os.path.isdir(filename):
                     write_directory(zfile, filename)
@@ -66,7 +70,7 @@ def create_zip(archive, compression, cmd, verbosity, interactive, filenames):
     return None
 
 
-def write_directory (zfile, directory):
+def write_directory(zfile, directory):
     """Write recursively all directories and filenames to zipfile instance."""
     for dirpath, dirnames, filenames in os.walk(directory):
         zfile.write(dirpath)

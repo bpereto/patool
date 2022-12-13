@@ -18,8 +18,4 @@
 7zr is a light executable supporting only the 7z archive format.
 """
 
-from .p7zip import \
-  extract_7z, \
-  list_7z, \
-  test_7z, \
-  create_7z
+from .p7zip import extract_7z, list_7z, test_7z, create_7z

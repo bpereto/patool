@@ -18,15 +18,15 @@ import os
 from .. import util
 
 
-def extract_chm (archive, compression, cmd, verbosity, interactive, outdir):
+def extract_chm(archive, compression, cmd, verbosity, interactive, outdir):
     """Extract a CHM archive."""
     # archmage can only extract in non-existing directories
     # so a nice dirname is created
     name = util.get_single_outfile("", archive)
     outfile = os.path.join(outdir, name)
-    return [cmd, '-x', os.path.abspath(archive), outfile]
+    return [cmd, "-x", os.path.abspath(archive), outfile]
 
 
-def test_chm (archive, compression, cmd, verbosity, interactive):
+def test_chm(archive, compression, cmd, verbosity, interactive):
     """Test a CHM archive."""
-    return [cmd, '-d', os.path.abspath(archive)]
+    return [cmd, "-d", os.path.abspath(archive)]

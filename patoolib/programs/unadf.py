@@ -16,13 +16,14 @@
 """Archive commands for the unadf program."""
 
 
-def extract_adf (archive, compression, cmd, verbosity, interactive, outdir):
+def extract_adf(archive, compression, cmd, verbosity, interactive, outdir):
     """Extract an ADF archive."""
-    return [cmd, archive, '-d', outdir]
+    return [cmd, archive, "-d", outdir]
 
 
-def list_adf (archive, compression, cmd, verbosity, interactive):
+def list_adf(archive, compression, cmd, verbosity, interactive):
     """List an ADF archive."""
-    return [cmd, '-l', archive]
+    return [cmd, "-l", archive]
+
 
 test_adf = list_adf

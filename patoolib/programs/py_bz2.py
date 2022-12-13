@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """Archive commands for the bz2 Python module."""
 from .. import util
+
 try:
     # try external bz2file module with multi-stream support
     import bz2file as bz2
@@ -22,14 +23,15 @@ except ImportError:
     import bz2
 
 # read in 1MB chunks
-READ_SIZE_BYTES = 1024*1024
+READ_SIZE_BYTES = 1024 * 1024
 
-def extract_bzip2 (archive, compression, cmd, verbosity, interactive, outdir):
+
+def extract_bzip2(archive, compression, cmd, verbosity, interactive, outdir):
     """Extract a BZIP2 archive with the bz2 Python module."""
     targetname = util.get_single_outfile(outdir, archive)
     try:
         with bz2.BZ2File(archive) as bz2file:
-            with open(targetname, 'wb') as targetfile:
+            with open(targetname, "wb") as targetfile:
                 data = bz2file.read(READ_SIZE_BYTES)
                 while data:
                     targetfile.write(data)
@@ -40,14 +42,14 @@ def extract_bzip2 (archive, compression, cmd, verbosity, interactive, outdir):
     return None
 
 
-def create_bzip2 (archive, compression, cmd, verbosity, interactive, filenames):
+def create_bzip2(archive, compression, cmd, verbosity, interactive, filenames):
     """Create a BZIP2 archive with the bz2 Python module."""
     if len(filenames) > 1:
-        raise util.PatoolError('multi-file compression not supported in Python bz2')
+        raise util.PatoolError("multi-file compression not supported in Python bz2")
     try:
-        with bz2.BZ2File(archive, 'wb') as bz2file:
+        with bz2.BZ2File(archive, "wb") as bz2file:
             filename = filenames[0]
-            with open(filename, 'rb') as srcfile:
+            with open(filename, "rb") as srcfile:
                 data = srcfile.read(READ_SIZE_BYTES)
                 while data:
                     bz2file.write(data)
