@@ -205,10 +205,10 @@ def run(cmd, verbosity=0, **kwargs):
     @return: command return code"""
     # Note that shell_quote_nt() result is not suitable for copy-paste
     # (especially on Unix systems), but it looks nicer than shell_quote().
-    if verbosity >= 0:
+    if verbosity > 0:
         log_info("running %s" % " ".join(map(shell_quote_nt, cmd)))
     if kwargs:
-        if verbosity >= 0:
+        if verbosity > 0:
             log_info(
                 "    with %s"
                 % ", ".join(
@@ -231,10 +231,9 @@ def run_checked(cmd, ret_ok=(0,), **kwargs):
                 "status=%d stderr=%s" % (ret.returncode, ret.stderr)
             )
 
-        msg = "Command '%s' returned non-zero exit status %d: stdout=%s stderr=%s" % (
+        msg = "Command '%s' returned non-zero exit status %d: stderr=%s" % (
             cmd,
             ret.returncode,
-            ret.stdout,
             ret.stderr,
         )
         raise exceptions.PatoolCmdError(msg)

@@ -541,14 +541,14 @@ def move_outdir_orphan(outdir):
     return (False, "multiple files in root")
 
 
-def run_archive_cmdlist(archive_cmdlist, verbosity=0):
+def run_archive_cmdlist(archive_cmdlist, ret_ok=None, verbosity=0):
     """Run archive command."""
     # archive_cmdlist is a command list with optional keyword arguments
     if isinstance(archive_cmdlist, tuple):
         cmdlist, runkwargs = archive_cmdlist
     else:
         cmdlist, runkwargs = archive_cmdlist, {}
-    return util.run_checked(cmdlist, verbosity=verbosity, **runkwargs)
+    return util.run_checked(cmdlist, ret_ok=ret_ok, verbosity=verbosity, **runkwargs)
 
 
 def make_file_readable(filename):
@@ -598,6 +598,7 @@ def _extract_archive(
     format=None,
     compression=None,
     password=None,
+    ret_ok=None
 ):
     """Extract an archive.
     @return: output directory if command is 'extract', else None
@@ -629,7 +630,7 @@ def _extract_archive(
             # an empty command list means the get_archive_cmdlist() function
             # already handled the command (e.g. when it's a builtin Python
             # function)
-            run_archive_cmdlist(cmdlist, verbosity=verbosity)
+            run_archive_cmdlist(cmdlist, ret_ok=ret_ok, verbosity=verbosity)
         if do_cleanup_outdir:
             target, msg = cleanup_outdir(outdir, archive)
         else:
@@ -739,8 +740,8 @@ def get_archive_cmdlist_func(program, command, format):
             If password is set, but can't be accepted raise appropriate
             message.
             """
-            util.log_info("... cmdlist_func = %s %s" % (archive_cmdlist_func, ""))
-            util.log_info("... kwargs=%s args=%s" % (kwargs, args))
+            # util.log_info("... cmdlist_func = %s %s" % (archive_cmdlist_func, ""))
+            # util.log_info("... kwargs=%s args=%s" % (kwargs, args))
             if "password" in kwargs and kwargs["password"] is None:
                 kwargs.pop("password")
             if "password" not in kwargs:
@@ -889,10 +890,10 @@ def _recompress_archive(archive, verbosity=0, interactive=True, password=None):
 
 def extract_archive(
     archive, verbosity=0, outdir=None, program=None, interactive=True, password=None
-):
+, ret_ok=None):
     """Extract given archive."""
     util.check_existing_filename(archive)
-    if verbosity >= 0:
+    if verbosity > 0:
         util.log_info("Extracting %s ..." % archive)
     return _extract_archive(
         archive,
@@ -901,6 +902,7 @@ def extract_archive(
         outdir=outdir,
         program=program,
         password=password,
+        ret_ok=ret_ok
     )
 
 
@@ -908,7 +910,7 @@ def list_archive(archive, verbosity=1, program=None, interactive=True, password=
     """List given archive."""
     # Set default verbosity to 1 since the listing output should be visible.
     util.check_existing_filename(archive)
-    if verbosity >= 0:
+    if verbosity > 0:
         util.log_info("Listing %s ..." % archive)
     return _handle_archive(
         archive,
@@ -923,7 +925,7 @@ def list_archive(archive, verbosity=1, program=None, interactive=True, password=
 def test_archive(archive, verbosity=0, program=None, interactive=True, password=None):
     """Test given archive."""
     util.check_existing_filename(archive)
-    if verbosity >= 0:
+    if verbosity > 0:
         util.log_info("Testing %s ..." % archive)
     res = _handle_archive(
         archive,
@@ -933,7 +935,7 @@ def test_archive(archive, verbosity=0, program=None, interactive=True, password=
         program=program,
         password=password,
     )
-    if verbosity >= 0:
+    if verbosity > 0:
         util.log_info("... tested ok.")
     return res
 
