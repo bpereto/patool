@@ -541,7 +541,7 @@ def move_outdir_orphan(outdir):
     return (False, "multiple files in root")
 
 
-def run_archive_cmdlist(archive_cmdlist, ret_ok=None, verbosity=0):
+def run_archive_cmdlist(archive_cmdlist, ret_ok=(0,), verbosity=0):
     """Run archive command."""
     # archive_cmdlist is a command list with optional keyword arguments
     if isinstance(archive_cmdlist, tuple):
@@ -598,7 +598,7 @@ def _extract_archive(
     format=None,
     compression=None,
     password=None,
-    ret_ok=None
+    ret_ok=(0,)
 ):
     """Extract an archive.
     @return: output directory if command is 'extract', else None
@@ -890,7 +890,7 @@ def _recompress_archive(archive, verbosity=0, interactive=True, password=None):
 
 def extract_archive(
     archive, verbosity=0, outdir=None, program=None, interactive=True, password=None
-, ret_ok=None):
+, ret_ok=(0,)):
     """Extract given archive."""
     util.check_existing_filename(archive)
     if verbosity > 0:
