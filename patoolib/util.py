@@ -214,9 +214,9 @@ def run_checked (cmd, ret_ok=(0,), **kwargs):
     ret = run(cmd, **kwargs)
     if ret.returncode not in ret_ok:
         if "password" in str(ret.stderr):
-            raise exceptions.PatoolPasswordError('Command %s returned non-zero exit status %d' % (cmd, ret.returncode))
+            raise exceptions.PatoolPasswordError('status=%d stderr=%s' % (ret.returncode, ret.stderr))
 
-        msg = "Command `%s' returned non-zero exit status %d: %s" % (cmd, ret.returncode, ret.stderr)
+        msg = "Command '%s' returned non-zero exit status %d: stdout=%s stderr=%s" % (cmd, ret.returncode, ret.stdout, ret.stderr)
         raise exceptions.PatoolCmdError(msg)
     return ret
 

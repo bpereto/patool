@@ -20,14 +20,14 @@ def extract_rar(archive, compression, cmd, verbosity, interactive, outdir, keep_
     """Extract a RAR archive."""
     cmdlist = [cmd, 'x']
     if not interactive:
-        cmdlist.extend(['-p-', '-y'])
+        cmdlist.append('-y')
     if keep_broken:
         cmdlist.append('-kb')
     cmdlist.append('-p%s' % password)
     cmdlist.extend(['--', os.path.abspath(archive)])
     return (cmdlist, {'cwd': outdir})
 
-def list_rar (archive, compression, cmd, verbosity, interactive, password=None):
+def list_rar (archive, compression, cmd, verbosity, interactive, password=''):
     """List a RAR archive."""
     cmdlist = [cmd]
     if verbosity > 1:
@@ -35,29 +35,26 @@ def list_rar (archive, compression, cmd, verbosity, interactive, password=None):
     else:
         cmdlist.append('l')
     if not interactive:
-        cmdlist.extend(['-p-', '-y'])
-    if password:
-        cmdlist.append('-p%s' % password)
+        cmdlist.append('-y')
+    cmdlist.append('-p%s' % password)
     cmdlist.extend(['--', archive])
     return cmdlist
 
-def test_rar (archive, compression, cmd, verbosity, interactive, password=None):
+def test_rar (archive, compression, cmd, verbosity, interactive, password=''):
     """Test a RAR archive."""
     cmdlist = [cmd, 't']
     if not interactive:
-        cmdlist.extend(['-p-', '-y'])
-    if password:
-        cmdlist.append('-p%s' % password)
+        cmdlist.append('-y')
+    cmdlist.append('-p%s' % password)
     cmdlist.extend(['--', archive])
     return cmdlist
 
-def create_rar (archive, compression, cmd, verbosity, interactive, filenames, password=None):
+def create_rar (archive, compression, cmd, verbosity, interactive, filenames, password=''):
     """Create a RAR archive."""
     cmdlist = [cmd, 'a']
     if not interactive:
         cmdlist.append('-y')
-    if password:
-        cmdlist.append('-p%s' % password)
+    cmdlist.append('-p%s' % password)
     cmdlist.extend(['-r', '-m5', '--', archive])
     cmdlist.extend(filenames)
     return cmdlist
