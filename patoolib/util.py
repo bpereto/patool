@@ -209,7 +209,7 @@ def run (cmd, verbosity=0, **kwargs):
         # hide command output on stdout
         with open(os.devnull, 'wb') as devnull:
             kwargs['stdout'] = devnull
-            res = subprocess.call(cmd, **kwargs)
+            res = subprocess.run(cmd, capture_output=True, **kwargs)
     else:
         res = subprocess.run(cmd, capture_output=True, **kwargs)
     return res
