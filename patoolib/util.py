@@ -205,13 +205,7 @@ def run (cmd, verbosity=0, **kwargs):
         if kwargs.get("shell"):
             # for shell calls the command must be a string
             cmd = " ".join(cmd)
-    if verbosity < 1:
-        # hide command output on stdout
-        with open(os.devnull, 'wb') as devnull:
-            kwargs['stdout'] = devnull
-            res = subprocess.run(cmd, capture_output=True, **kwargs)
-    else:
-        res = subprocess.run(cmd, capture_output=True, **kwargs)
+    res = subprocess.run(cmd, capture_output=True, **kwargs)
     return res
 
 
