@@ -25,7 +25,7 @@ def extract_rar(
     interactive,
     outdir,
     keep_broken=True,
-    password="",
+    password="-",
 ):
     """Extract a RAR archive."""
     cmdlist = [cmd, "x"]
@@ -38,7 +38,7 @@ def extract_rar(
     return (cmdlist, {"cwd": outdir})
 
 
-def list_rar(archive, compression, cmd, verbosity, interactive, password=""):
+def list_rar(archive, compression, cmd, verbosity, interactive, password="-"):
     """List a RAR archive."""
     cmdlist = [cmd]
     if verbosity > 1:
@@ -52,7 +52,7 @@ def list_rar(archive, compression, cmd, verbosity, interactive, password=""):
     return cmdlist
 
 
-def test_rar(archive, compression, cmd, verbosity, interactive, password=""):
+def test_rar(archive, compression, cmd, verbosity, interactive, password="-"):
     """Test a RAR archive."""
     cmdlist = [cmd, "t"]
     if not interactive:
@@ -63,7 +63,7 @@ def test_rar(archive, compression, cmd, verbosity, interactive, password=""):
 
 
 def create_rar(
-    archive, compression, cmd, verbosity, interactive, filenames, password=""
+    archive, compression, cmd, verbosity, interactive, filenames, password="-"
 ):
     """Create a RAR archive."""
     cmdlist = [cmd, "a"]
