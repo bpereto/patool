@@ -15,27 +15,23 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """Archive commands for the 7z program."""
 
-def _maybe_add_password(cmdlist, password):
-    if password:
-        cmdlist.append('-p%s' % password)
-
-def extract_7z(archive, compression, cmd, verbosity, interactive, outdir, password=None):
+def extract_7z(archive, compression, cmd, verbosity, interactive, outdir, password=''):
     """Extract a 7z archive."""
     cmdlist = [cmd, 'x']
     if not interactive:
         cmdlist.append('-y')
-    _maybe_add_password(cmdlist, password)
+    cmdlist.append('-p%s' % password)
     cmdlist.extend(['-o%s' % outdir, '--', archive])
     return cmdlist
 
-def extract_7z_singlefile(archive, compression, cmd, verbosity, interactive, outdir, password=None):
+def extract_7z_singlefile(archive, compression, cmd, verbosity, interactive, outdir, password=''):
     """Extract a singlefile archive (e.g. gzip or bzip2) with '7z e'.
     This makes sure a single file and no subdirectories are created,
     which would cause errors with patool repack."""
     cmdlist = [cmd, 'e']
     if not interactive:
         cmdlist.append('-y')
-    _maybe_add_password(cmdlist, password)
+    cmdlist.append('-p%s' % password)
     cmdlist.extend(['-o%s' % outdir, '--', archive])
     return cmdlist
 
