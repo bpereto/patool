@@ -211,17 +211,20 @@ def run (cmd, verbosity=0, **kwargs):
             kwargs['stdout'] = devnull
             res = subprocess.call(cmd, **kwargs)
     else:
-        res = subprocess.call(cmd, **kwargs)
+        res = subprocess.run(cmd, capture_output=True, **kwargs)
     return res
 
 
 def run_checked (cmd, ret_ok=(0,), **kwargs):
     """Run command and raise PatoolCmdError on error."""
-    retcode = run(cmd, **kwargs)
-    if retcode not in ret_ok:
-        msg = "Command `%s' returned non-zero exit status %d" % (cmd, retcode)
+    ret = run(cmd, **kwargs)
+    if ret.returncode not in ret_ok:
+        if "password" in str(ret.stderr):
+            raise exceptions.PatoolPasswordError('Command %s returned non-zero exit status %d' % (cmd, ret.returncode))
+
+        msg = "Command `%s' returned non-zero exit status %d: %s" % (cmd, ret.returncode, ret.stderr)
         raise exceptions.PatoolCmdError(msg)
-    return retcode
+    return ret
 
 
 @memoized
