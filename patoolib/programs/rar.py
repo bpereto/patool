@@ -26,6 +26,7 @@ def extract_rar(
     outdir,
     keep_broken=True,
     password="-",
+    ret_ok=(0,3,9,11,)
 ):
     """Extract a RAR archive."""
     cmdlist = [cmd, "x"]
@@ -35,7 +36,7 @@ def extract_rar(
         cmdlist.append("-kb")
     cmdlist.append("-p%s" % password)
     cmdlist.extend(["--", os.path.abspath(archive)])
-    return (cmdlist, {"cwd": outdir})
+    return (cmdlist, {"cwd": outdir, "ret_ok": ret_ok})
 
 
 def list_rar(archive, compression, cmd, verbosity, interactive, password="-"):

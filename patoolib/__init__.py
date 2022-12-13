@@ -541,14 +541,14 @@ def move_outdir_orphan(outdir):
     return (False, "multiple files in root")
 
 
-def run_archive_cmdlist(archive_cmdlist, ret_ok=(0,), verbosity=0):
+def run_archive_cmdlist(archive_cmdlist, verbosity=0):
     """Run archive command."""
     # archive_cmdlist is a command list with optional keyword arguments
     if isinstance(archive_cmdlist, tuple):
         cmdlist, runkwargs = archive_cmdlist
     else:
         cmdlist, runkwargs = archive_cmdlist, {}
-    return util.run_checked(cmdlist, ret_ok=ret_ok, verbosity=verbosity, **runkwargs)
+    return util.run_checked(cmdlist, verbosity=verbosity, **runkwargs)
 
 
 def make_file_readable(filename):
@@ -598,7 +598,6 @@ def _extract_archive(
     format=None,
     compression=None,
     password=None,
-    ret_ok=(0,)
 ):
     """Extract an archive.
     @return: output directory if command is 'extract', else None
@@ -630,12 +629,12 @@ def _extract_archive(
             # an empty command list means the get_archive_cmdlist() function
             # already handled the command (e.g. when it's a builtin Python
             # function)
-            run_archive_cmdlist(cmdlist, ret_ok=ret_ok, verbosity=verbosity)
+            run_archive_cmdlist(cmdlist, verbosity=verbosity)
         if do_cleanup_outdir:
             target, msg = cleanup_outdir(outdir, archive)
         else:
             target, msg = outdir, "`%s'" % outdir
-        if verbosity >= 0:
+        if verbosity > 0:
             util.log_info("... %s extracted to %s." % (archive, msg))
         return target
     finally:
@@ -889,8 +888,7 @@ def _recompress_archive(archive, verbosity=0, interactive=True, password=None):
 
 
 def extract_archive(
-    archive, verbosity=0, outdir=None, program=None, interactive=True, password=None
-, ret_ok=(0,)):
+    archive, verbosity=0, outdir=None, program=None, interactive=True, password=None):
     """Extract given archive."""
     util.check_existing_filename(archive)
     if verbosity > 0:
@@ -901,8 +899,7 @@ def extract_archive(
         interactive=interactive,
         outdir=outdir,
         program=program,
-        password=password,
-        ret_ok=ret_ok
+        password=password
     )
 
 
