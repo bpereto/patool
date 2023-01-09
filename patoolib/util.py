@@ -197,7 +197,7 @@ class memoized(object):
 def backtick(cmd, encoding="utf-8"):
     """Return decoded output from command."""
     data = subprocess.Popen(cmd, stdout=subprocess.PIPE).communicate()[0]
-    return data.decode(encoding)
+    return data.decode(encoding, errors='replace')
 
 
 def run(cmd, verbosity=0, **kwargs):
